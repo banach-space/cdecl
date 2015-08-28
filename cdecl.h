@@ -32,7 +32,7 @@ int gettoken(char *);
 char * read_to_first_identifier(char *input);
 
 // Read past closing ')' print out "function returning"
-void deal_with_function_args(void);
+char* deal_with_function_args(char *input);
 
 // While you've got "[size]" print it out and read past it
 char* deal_with_arrays(char *input);

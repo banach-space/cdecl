@@ -87,7 +87,7 @@ char* read_to_first_identifier(char *input)
         //printf("[M] len = %d\n", len);
         //printf("[M] this.type = %d\n", this.type);
     }
-    printf("Declare %s as ", this.string);
+    printf("Declare %s as", this.string);
     token_id--;
     len = gettoken(input);
     input += len;
@@ -121,11 +121,11 @@ char* deal_with_arrays(char *input)
     int array_len = 0;
     len = gettoken(input);
 
-    printf("an array of length ");
+    printf(" an array of length");
     if (isdigit(this.string[0]))
     {
         array_len = atoi(this.string);
-        printf("%d", array_len);
+        printf(" %d", array_len);
         input += len; 
         len = gettoken(input);
     } else
@@ -143,7 +143,7 @@ char* deal_with_arrays(char *input)
 
 void deal_with_any_pointers()
 {
-    if (stack[token_id].type == '*')
+    while (stack[token_id].type == '*')
     {
         printf(" pointer to");
         token_id--;
@@ -152,7 +152,17 @@ void deal_with_any_pointers()
 }
 char* deal_with_function_args(char *input)
 {
-    
+    int len;
+    len = gettoken(input);
+
+    while (this.type != ')')
+    {
+        input += len;
+        len = gettoken(input);
+    } 
+
+    printf(" a function returning");
+    return input;
 }
 
 int main(int argc, char *argv[])
