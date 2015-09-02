@@ -1,30 +1,43 @@
+//==========================================================================
+// FILE:
+//      cdecl.c
+//
+// AUTHOR:
+//      zimzum@github 
+//
+// DESCRIPTION:
+//      Implementation of all functions (including 'main')
+//
+//  License: GNU GPL v2.0 
+//=====================+====================================================
+
 #include "cdecl.h"
 
-/* Holds the token just read */
+//===-----------------------------------------------------------------------===
+// GLOBAL VARIABLES                                                         
+//===-----------------------------------------------------------------------===
+// Holds the token just read
 static token_t this;
 
-/* Holds tokens we read before reaching first identifier */
+// Holds tokens we read before reaching first identifier
 static token_t stack[MAXTOKENS];
 static int token_id;
 
-/*==========================================================================*/
-/* FUNCTION DEFINITIONS                                                     */
-/*==========================================================================*/
+//===-----------------------------------------------------------------------===
+// FUNCTION DEFINITIONS                                                     
+//===-----------------------------------------------------------------------===
 void classify_string()
 {
     if (!strcmp(this.string, "char") || !strcmp(this.string, "int"))
     {
         this.type = TYPE;
-        //printf("[CS] {1}\n");
     } else if (!strcmp(this.string, "const") || !strcmp(this.string, "volatile"))
     {
         this.type = QUALIFIER;
-        //printf("[CS] {2}\n");
     }
     else
     {
         this.type = IDENTIFIER;
-        //printf("[CS] {3}\n");
     }
     
     return;
@@ -52,8 +65,6 @@ int gettoken( char *c)
         this.string[0] = *current_c;
         this.string[1] = 0;
         length++;
-        //printf("[GT] here\n");
-        //printf("[GT] current_c = %d\n", *current_c);
     } else
     {
         /* Read until whitespace or NUL*/
@@ -70,27 +81,26 @@ int gettoken( char *c)
     if (isalnum(this.string[0]))
         classify_string();
 
-    //printf("[GT] Just read: %s\n", this.string);
-
     return length+whitespaces_len;
 }
 
 char* read_to_first_identifier(char *input)
 {
     int len = 0;
+
     while (this.type != IDENTIFIER)
     {
         len = gettoken(input);
         stack[++token_id] = this;
 
         input += len;
-        //printf("[M] len = %d\n", len);
-        //printf("[M] this.type = %d\n", this.type);
     }
+
     printf("Declare %s as", this.string);
     token_id--;
     len = gettoken(input);
     input += len;
+
     return input;
 }
 
@@ -165,6 +175,9 @@ char* deal_with_function_args(char *input)
     return input;
 }
 
+//===-----------------------------------------------------------------------===
+// MAIN                                                                     
+//===-----------------------------------------------------------------------===
 int main(int argc, char *argv[])
 {
     assert(argc >= 2);
