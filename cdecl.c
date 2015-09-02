@@ -6,7 +6,7 @@
 //      zimzum@github 
 //
 // DESCRIPTION:
-//      Implementation of all functions (including 'main')
+//      Implementation of all functions
 //
 //  License: GNU GPL v2.0 
 //=====================+====================================================
@@ -173,18 +173,4 @@ char* deal_with_function_args(char *input)
 
     printf(" a function returning");
     return input;
-}
-
-//===-----------------------------------------------------------------------===
-// MAIN                                                                     
-//===-----------------------------------------------------------------------===
-int main(int argc, char *argv[])
-{
-    assert(argc >= 2);
-    char *input = argv[1];
-
-    input = read_to_first_identifier(input);
-    deal_with_declarator(input);
-
-    return 0;
 }
