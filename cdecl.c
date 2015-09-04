@@ -1,4 +1,4 @@
-//==========================================================================
+//=============================================================================
 // FILE:
 //      cdecl.c
 //
@@ -9,7 +9,7 @@
 //      Implementation of all functions
 //
 //  License: GNU GPL v2.0 
-//=====================+====================================================
+//=============================================================================
 
 #include "cdecl.h"
 
@@ -26,20 +26,77 @@ static int token_id;
 //===-----------------------------------------------------------------------===
 // FUNCTION DEFINITIONS                                                     
 //===-----------------------------------------------------------------------===
-void classify_string()
+void classify_string(token_t* input)
 {
-    if (!strcmp(this.string, "char") || !strcmp(this.string, "int"))
+    if (!strcmp(input->string, "char"))
     {
-        this.type = TYPE;
-    } else if (!strcmp(this.string, "const") || !strcmp(this.string, "volatile"))
-    {
-        this.type = QUALIFIER;
+        input->type = TYPE;
+        return;
     }
-    else
+    if (!strcmp(input->string, "int"))
     {
-        this.type = IDENTIFIER;
+        input->type = TYPE;
+        return;
+    }
+    if (!strcmp(input->string, "short"))
+    {
+        input->type = TYPE;
+        return;
+    }
+    if (!strcmp(input->string, "void"))
+    {
+        input->type = TYPE;
+        return;
+    }
+    if (!strcmp(input->string, "unsigned"))
+    {
+        input->type = TYPE;
+        return;
+    }
+    if (!strcmp(input->string, "signed"))
+    {
+        input->type = TYPE;
+        return;
+    }
+    if (!strcmp(input->string, "long"))
+    {
+        input->type = TYPE;
+        return;
+    }
+    if (!strcmp(input->string, "float"))
+    {
+        input->type = TYPE;
+        return;
+    }
+    if (!strcmp(input->string, "double"))
+    {
+        input->type = TYPE;
+        return;
+    }
+    if (!strcmp(input->string, "struct"))
+    {
+        input->type = TYPE;
+        return;
+    }
+    if (!strcmp(input->string, "union"))
+    {
+        input->type = TYPE;
+        return;
+    }
+    if (!strcmp(input->string, "enum"))
+    {
+        input->type = TYPE;
+        return;
+    }
+
+
+    if (!strcmp(input->string, "const") || !strcmp(input->string, "volatile"))
+    {
+        input->type = QUALIFIER;
+        return;
     }
     
+    input->type = IDENTIFIER;
     return;
 }
 
@@ -79,7 +136,7 @@ int gettoken( char *c)
 
     /* Get token type */
     if (isalnum(this.string[0]))
-        classify_string();
+        classify_string(&this);
 
     return length+whitespaces_len;
 }
