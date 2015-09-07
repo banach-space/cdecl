@@ -40,7 +40,7 @@ typedef struct token {
 //  ENUM: type_tag 
 //
 //  DESCRIPTION:
-//      TODO
+//      Enumeration for diffrent tags
 //      
 //-----------------------------------------------------------------------------
 enum type_tag
@@ -59,10 +59,10 @@ enum type_tag
 //      classify_string()
 //  
 //  DESCRIPTION:
-//      Look at the current token and return a value of "type" "qualifier"
-//      or "identifier" in this.type 
+//      Look at the current token and return a corresponding type_tag in
+//      input.type
 //  INPUT:
-//      void
+//      input - Pointer to the token that needs its type to be specified.
 //  RETURN:
 //      void
 //------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ int gettoken(char *);
 //      read_to_first_identifier()
 //  
 //  DESCRIPTION:
-//      Reads tokens and puses them onto the stack until the first identifier
+//      Reads tokens and pushes them onto the stack until the first identifier
 //      is read. 
 //  INPUT:
 //      The C declaration to be analysed.
@@ -104,7 +104,6 @@ char * read_to_first_identifier(char *input);
 //  DESCRIPTION:
 //      Parses function arguments. Currently just reads until the closing ')'
 //      is read. 
-//      TODO expand!
 //  INPUT:
 //      Pointer to the current position within declaration that's being
 //      analysed. 
@@ -135,7 +134,7 @@ char* deal_with_arrays(char *input);
 //      deal_with_special_tokens()
 //  
 //  DESCRIPTION:
-//      Deals with '*', 'const' and 'volatile' until it pops a token that
+//      Deals with '*', "const" and "volatile" until it pops a token that
 //`     doesn't fall into this category.
 //  INPUT:
 //      void

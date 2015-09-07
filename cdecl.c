@@ -120,35 +120,39 @@ int gettoken(char *c)
         current_c++;
     }
 
-    // 2. Get this.string and this.type
+    // 2. Populate the 'this' token
     if (!isalnum(*current_c) && *current_c != 0)
     {
-        // It's neither type, nor qualifier nor identifier;
+        // It's neither type, nor qualifier nor identifier
         if (*current_c == '*')
         {
             // It's a pointer
             this.type = POINTER;
         } else
         {
-            // Other language spacific character
+            // Other language-spacific character (e.g. '(', '[')
             this.type = *current_c;
         }
 
-        // This string becomes the read language-specific character.
+        // this.string becomes the value of the token (saved as a C string)
         this.string[0] = *current_c;
         this.string[1] = 0;
 
         length++;
     } else
     {
-        // It's either a type, qualifier or identifier. Read until whitespace or NUL*/
+        // It's either a type, qualifier or identifier. Read until whitespace or NUL.
         while (isalnum(*current_c))
         {
             current_c++;
             length++;    
         }
+
+        // Copy the value of the token into this.strin
         memcpy(this.string, c+whitespaces_len, (size_t)length); 
         this.string[length] = '\0'; 
+
+        // Determine this.type
         classify_string(&this);
     }
 
@@ -185,8 +189,11 @@ void deal_with_declarator(char* input)
         deal_with_function_args(input);
     }
 
+    // Deal with "const", "volatile" and "*"
     deal_with_special_tokens();
 
+    // Print everything that's left on the stack. Print it in order that
+    // it was typed in (this gives more natural 'plain English').
     int temp = 1;
     while (token_id)
     {
@@ -196,6 +203,7 @@ void deal_with_declarator(char* input)
         printf(" %s", this.string);  
     }
 
+    // We are done. 
     printf("\n");
 
 }
@@ -222,6 +230,7 @@ char* deal_with_arrays(char *input)
     }
 
     printf(" of");
+
     return input;
 
 }
