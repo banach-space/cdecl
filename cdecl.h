@@ -47,7 +47,8 @@ enum type_tag
 {
     TYPE, 
     QUALIFIER, 
-    IDENTIFIER
+    IDENTIFIER,
+    POINTER
 };
 
 //===-----------------------------------------------------------------------===
@@ -131,16 +132,17 @@ char* deal_with_arrays(char *input);
 
 //-----------------------------------------------------------------------------
 //  NAME:
-//      deal_with_any_pointers()
+//      deal_with_special_tokens()
 //  
 //  DESCRIPTION:
-//      While there's "*" on the stack, print "pointer to" and pop it,
+//      Deals with '*', 'const' and 'volatile' until it pops a token that
+//`     doesn't fall into this category.
 //  INPUT:
 //      void
 //  RETURN:
 //      void
 //-----------------------------------------------------------------------------
-void deal_with_any_pointers(void);
+void deal_with_special_tokens(void);
 
 //-----------------------------------------------------------------------------
 //  NAME:

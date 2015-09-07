@@ -88,9 +88,13 @@ void classify_string(token_t* input)
         input->type = TYPE;
         return;
     }
-
-
-    if (!strcmp(input->string, "const") || !strcmp(input->string, "volatile"))
+    if (!strcmp(input->string, "const")) 
+    {
+        input->type = QUALIFIER;
+        memcpy(input->string, "read-only", 10);
+        return;
+    }
+    if (!strcmp(input->string, "volatile")) 
     {
         input->type = QUALIFIER;
         return;
@@ -100,31 +104,44 @@ void classify_string(token_t* input)
     return;
 }
 
-int gettoken( char *c)
+int gettoken(char *c)
 {
-    /* Length of the token */
+    // Length of the current token
     int length = 0;
-    /* Number of whitespaces read */
+    // Number of whitespaces read
     int whitespaces_len = 0;
-    /* Current character */
+    // Current character
     char *current_c = c;
 
-    /* Skip leading white-spaces */
+    // 1. Skip leading white-spaces
     while (*current_c == ' ')
     {
         whitespaces_len++;
         current_c++;
     }
 
+    // 2. Get this.string and this.type
     if (!isalnum(*current_c) && *current_c != 0)
     {
-        this.type = *current_c;
+        // It's neither type, nor qualifier nor identifier;
+        if (*current_c == '*')
+        {
+            // It's a pointer
+            this.type = POINTER;
+        } else
+        {
+            // Other language spacific character
+            this.type = *current_c;
+        }
+
+        // This string becomes the read language-specific character.
         this.string[0] = *current_c;
         this.string[1] = 0;
+
         length++;
     } else
     {
-        /* Read until whitespace or NUL*/
+        // It's either a type, qualifier or identifier. Read until whitespace or NUL*/
         while (isalnum(*current_c))
         {
             current_c++;
@@ -132,11 +149,8 @@ int gettoken( char *c)
         }
         memcpy(this.string, c+whitespaces_len, (size_t)length); 
         this.string[length] = '\0'; 
-    }
-
-    /* Get token type */
-    if (isalnum(this.string[0]))
         classify_string(&this);
+    }
 
     return length+whitespaces_len;
 }
@@ -171,11 +185,15 @@ void deal_with_declarator(char* input)
         deal_with_function_args(input);
     }
 
-    deal_with_any_pointers();
+    deal_with_special_tokens();
+
+    int temp = 1;
     while (token_id)
     {
-        this = stack[token_id--];
-        printf(" %s ", this.string);  
+        this = stack[temp];
+        temp++;
+        token_id--;
+        printf(" %s", this.string);  
     }
 
     printf("\n");
@@ -208,15 +226,26 @@ char* deal_with_arrays(char *input)
 
 }
 
-void deal_with_any_pointers()
+void deal_with_special_tokens()
 {
-    while (stack[token_id].type == '*')
+    while (token_id && ((stack[token_id].type == POINTER || stack[token_id].type == QUALIFIER)))
     {
-        printf(" pointer to");
+        this = stack[token_id];
         token_id--;
+
+        if (this.type != POINTER)
+        {
+            printf(" %s", this.string);
+        } else
+        {
+            printf(" pointer to");
+        }
+        continue;
     }
 
+    return;
 }
+
 char* deal_with_function_args(char *input)
 {
     int len;
